@@ -8,12 +8,20 @@ const connectDB = async () => {
 
     try {
         const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/cropchain', {
-             serverSelectionTimeoutMS: 5000 // Timeout after 5s instead of 30s
+             serverSelectionTimeoutMS: 2000 // Fast timeout to quickly fallback
         });
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
-        console.error(`Error: ${error.message}`);
-        console.warn('⚠️ Server is running without a database connection. Mongoose will buffer queries.');
+        console.warn('⚠️ Local MongoDB connection failed. Starting in-memory MongoDB server instead...');
+        try {
+            const { MongoMemoryServer } = require('mongodb-memory-server');
+            const mongoServer = await MongoMemoryServer.create();
+            const mongoUri = mongoServer.getUri();
+            await mongoose.connect(mongoUri);
+            console.log(`✅ In-Memory MongoDB Connected at: ${mongoUri}`);
+        } catch (memError) {
+            console.error(`❌ In-Memory MongoDB Error: ${memError.message}`);
+        }
     }
 };
 

@@ -163,7 +163,8 @@ const registerUser = async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            role
+            role,
+            status: 'active'
         });
 
         if (user) {
@@ -516,7 +517,8 @@ const walletRegister = async (req, res) => {
             email,
             walletAddress: normalizedAddress,
             role,
-            password: await bcrypt.hash(randomPassword, 12) // Secure random password for wallet users
+            password: await bcrypt.hash(randomPassword, 12), // Secure random password for wallet users
+            status: 'active'
         });
 
         // Delete used nonce

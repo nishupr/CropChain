@@ -684,7 +684,7 @@ if (process.env.NODE_ENV !== 'test') {
         console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
 
         console.log('\n🔒 Security features enabled:');
-        console.log(`  ✓ Rate limiting (${rateLimitMaxRequests} req/window)`);
+        console.log(`  ✓ Rate limiting (${process.env.RATE_LIMIT_MAX_REQUESTS || 100} req/window)`);
         console.log(`  ✓ NoSQL injection protection`);
         console.log(`  ✓ Input validation with Joi`);
         console.log(`  ✓ Security headers with Helmet`);
@@ -696,7 +696,7 @@ if (process.env.NODE_ENV !== 'test') {
         console.log('\n⚙️  Configuration:');
         console.log(`  • CORS origins: ${uniqueAllowedOrigins.length > 0 ? uniqueAllowedOrigins.join(', ') : 'None configured'}`);
         console.log(`  • Max file size: ${Math.round(maxFileSize / 1024 / 1024)}MB`);
-        console.log(`  • Rate limit window: ${Math.ceil(rateLimitWindowMs / 60000)} minutes`);
+        console.log(`  • Rate limit window: ${Math.ceil((process.env.RATE_LIMIT_WINDOW_MS || 900000) / 60000)} minutes`);
 
         if (process.env.NODE_ENV === 'production') {
             console.log('\n🏭 Production mode warnings:');
